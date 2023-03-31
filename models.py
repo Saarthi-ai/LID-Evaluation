@@ -6,7 +6,7 @@ from decouple import config
 # Save model
 print('Downloading HF models....')
 language_id = EncoderClassifier.from_hparams(source="sahita/language-identification", savedir="tmp")
-# language_id = EncoderClassifier.from_hparams(source="sahita/language-identification", savedir="tmp",run_opts={"device":"cuda"})   # If inferencing on GPU
+# language_id = EncoderClassifier.from_hparams(source="sahita/language-identification", savedir="tmp", run_opts={"device":"cuda"})   # If inferencing on GPU
 
 # Secrets
 SPEECH_KEY = config('SPEECH_KEY', cast=str)

@@ -7,6 +7,8 @@ import seaborn as sns
 from collections import Counter
 import os
 from models import *
+from pydub import AudioSegment
+from pydub.silence import split_on_silence
 # import json
 # import string
 import time
@@ -66,11 +68,12 @@ def runcmd(cmd, verbose = False, *args, **kwargs):
     pass
 
 
-def download_recordings(df, audio_save_dir, utterances_save_dir):
+def download_recordings(df, audio_save_dir, utterances_save_dir, clipped_audio_dir):
 
     # Create dir for audio and customer utterances
     runcmd(cmd = 'mkdir {}'.format(audio_save_dir))
     runcmd(cmd = 'mkdir {}'.format(utterances_save_dir))
+    runcmd(cmd = 'mkdir {}'.format(clipped_audio_dir))
 
 
     # wget files from links provided in DataFrame
@@ -79,8 +82,9 @@ def download_recordings(df, audio_save_dir, utterances_save_dir):
     #     cmd = f'wget -O {os.path.abspath(audio_save_dir)}/{i[58:94]}.mp3 \"{str(i)}?{ACCESS_TOKEN}\"'     # Change the name of the output file
     #     runcmd(cmd=cmd)
 
+
     # Include /path/to/dir/* at the end. Required for glob.glob
-    if audio_save_dir[-1]!='*':
+    if audio_save_dir[-1] != '*':
         audio_save_dir=os.path.abspath(audio_save_dir)+'/*'
 
     # Split the dual channel audio; Save only the left channel (customer utterance)
@@ -90,6 +94,23 @@ def download_recordings(df, audio_save_dir, utterances_save_dir):
     #     cmd='ffmpeg -i \"'+i+'\" -map_channel 0.0.0 \"'+os.path.join(utterances_save_dir, i.split('/')[-1].split('.mp3')[0])+'_customer.wav\"'
     #     runcmd(cmd)
 
+        
+    # Include /path/to/dir/* at the end. Required for glob.glob
+    if utterances_save_dir[-1] != '*':
+        utterances_save_dir = os.path.abspath(utterances_save_dir)+'/*'
+        
+    # Clip out the silent regions from audios
+    utterance_list = glob.glob(utterances_save_dir)
+    print('Clipping silent portions out of audio files....')
+    for i in utterance_list:
+        sound = AudioSegment.from_file(i, format = 'wav')
+        audio_chunks = split_on_silence(sound, min_silence_len = 100, silence_thresh = -45, keep_silence = 50)
+        combined = AudioSegment.empty()
+        
+        for chunk in audio_chunks:
+            combined += chunk
+        combined.export('{0}/{1}'.format(os.path.abspath(clipped_audio_dir), i.split('/')[-1]), format = 'wav')
+        
 
 
 def make_predictions(model_id, utter_dir, sub_df):
