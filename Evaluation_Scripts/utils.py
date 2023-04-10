@@ -78,9 +78,9 @@ def download_recordings(df, audio_save_dir, utterances_save_dir, clipped_audio_d
 
     # wget files from links provided in DataFrame
     print('Downloading Files....')
-    # for i in df['information.recording_file_url']: # pass original dataframe
-    #     cmd = f'wget -O {os.path.abspath(audio_save_dir)}/{i[58:94]}.mp3 \"{str(i)}?{ACCESS_TOKEN}\"'     # Change the name of the output file
-    #     runcmd(cmd=cmd)
+    for i in df['information.recording_file_url']: # pass original dataframe
+        cmd = f'wget -O {os.path.abspath(audio_save_dir)}/{i[58:94]}.mp3 \"{str(i)}?{ACCESS_TOKEN}\"'     # Change the name of the output file
+        runcmd(cmd=cmd)
 
 
     # Include /path/to/dir/* at the end. Required for glob.glob
@@ -90,9 +90,9 @@ def download_recordings(df, audio_save_dir, utterances_save_dir, clipped_audio_d
     # Split the dual channel audio; Save only the left channel (customer utterance)
     files_list = glob.glob(audio_save_dir)
     print('Splitting Customer Utterances from audio....')
-    # for i in files_list:
-    #     cmd='ffmpeg -i \"'+i+'\" -map_channel 0.0.0 \"'+os.path.join(utterances_save_dir, i.split('/')[-1].split('.mp3')[0])+'_customer.wav\"'
-    #     runcmd(cmd)
+    for i in files_list:
+        cmd='ffmpeg -i \"'+i+'\" -map_channel 0.0.0 \"'+os.path.join(utterances_save_dir, i.split('/')[-1].split('.mp3')[0])+'_customer.wav\"'
+        runcmd(cmd)
 
         
     # Include /path/to/dir/* at the end. Required for glob.glob

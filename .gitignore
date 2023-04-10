@@ -1,8 +1,10 @@
 .env
-__pycache__/
-audios/
-tmp/
-utterances/
-results_azure.csv
-results_hf.csv
-clipped_audios/
+Evaluation_Scripts/__pycache__/
+Evaluation_Scripts/audios/
+Evaluation_Scripts/tmp/
+Evaluation_Scripts/utterances/
+Evaluation_Scripts/results_azure.csv
+Evaluation_Scripts/results_hf.csv
+Evaluation_Scripts/clipped_audios/
+StreamingLID_API/__pycache__/
+log_file
