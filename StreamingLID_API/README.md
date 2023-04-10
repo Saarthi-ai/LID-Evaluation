@@ -1,9 +1,9 @@
 ### REQUIREMENTS
-azure-cognitiveservices-speech
-python-decouple
-python-multipart
-fastapi
-uvicorn
+- azure-cognitiveservices-speech
+- python-decouple
+- python-multipart
+- fastapi
+- uvicorn
 
 ### USAGE
 ``` bash
