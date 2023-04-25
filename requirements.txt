@@ -1,0 +1,9 @@
+azure-cognitiveservices-speech
+python-decouple
+python-multipart
+fastapi
+uvicorn
+pydub
+seaborn
+torchaudio
+speechbrain
